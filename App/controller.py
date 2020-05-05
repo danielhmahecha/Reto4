@@ -48,22 +48,23 @@ def printList (lst):
 
 # Funciones para la carga de datos 
 
-def loadLibraries (catalog, sep=','):
+def loadLibraries (catalog):
     """
     Carga las bibliotecas del archivo.
     Por cada para de bibliotecas, se almacena la distancia en kilometros entre ellas.
     """
     t1_start = process_time() #tiempo inicial
-    libsFile = cf.data_dir + 'GoodReads/libraries_edges.csv'
+    libsFile = cf.data_dir + 'flights_edges.csv'
     dialect = csv.excel()
-    dialect.delimiter=sep
+    dialect.delimiter=';'
     with open(libsFile, encoding="utf-8-sig") as csvfile:
         spamreader = csv.DictReader(csvfile, dialect=dialect)
         for row in spamreader:
-            model.addLibraryNode (catalog, row)
-            model.addLibraryEdge (catalog, row)
+            #print(row)
+            model.addReviewNode (catalog, row)
+            model.addReviewEdge (catalog, row)
     t1_stop = process_time() #tiempo final
-    print("Tiempo de ejecución carga de grafo de bibliotecas:",t1_stop-t1_start," segundos")   
+    print("Tiempo de ejecución carga de grafo de vuelos:",t1_stop-t1_start," segundos")   
 
 
 

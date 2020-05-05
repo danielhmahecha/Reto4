@@ -27,6 +27,7 @@ from ADT import map as map
 from ADT import list as lt
 from DataStructures import listiterator as it
 from datetime import datetime
+from DataStructures import dijkstra as dk
 
 """
 Se define la estructura de un catálogo de libros.
@@ -40,9 +41,26 @@ def newCatalog():
     """
     Inicializa el catálogo y retorna el catalogo inicializado.
     """
-    libgraph = g.newGraph(7235,compareByKey,directed=True)
-    catalog = {'librariesGraph':libgraph}    
+    rgraph = g.newGraph(111353,compareByKey)
+    catalog = {'reviewGraph':rgraph}    
     return catalog
+
+
+def addReviewNode (catalog, row):
+    """
+    Adiciona un nodo para almacenar un libro o usuario 
+    """
+    if not g.containsVertex(catalog['reviewGraph'], row['SOURCE']):
+        g.insertVertex (catalog['reviewGraph'], row['SOURCE'])
+    if not g.containsVertex(catalog['reviewGraph'], row['DEST']):
+        g.insertVertex (catalog['reviewGraph'], row['DEST'])
+
+def addReviewEdge (catalog, row):
+    """
+    Adiciona un enlace para almacenar una revisión
+    """
+    if row['AIR_TIME'] != "":
+        g.addEdge (catalog['reviewGraph'], row['SOURCE'], row['DEST'], float(row['AIR_TIME']))
 
 
 def addLibraryNode (catalog, row):
@@ -65,8 +83,8 @@ def countNodesEdges (catalog):
     """
     Retorna la cantidad de nodos y enlaces del grafo de bibliotecas
     """
-    nodes = g.numVertex(catalog['librariesGraph'])
-    edges = g.numEdges(catalog['librariesGraph'])
+    nodes = g.numVertex(catalog['reviewGraph'])
+    edges = g.numEdges(catalog['reviewGraph'])
 
     return nodes,edges
 
@@ -74,11 +92,23 @@ def getShortestPath (catalog, source, dst):
     """
     Retorna el camino de menor costo entre vertice origen y destino, si existe 
     """
+    graph = catalog['reviewGraph']
     print("vertices: ",source,", ",dst)
+    if g.containsVertex(graph, source) and g.containsVertex(graph, dst):
+        dijks = dk.newDijkstra(graph,source)
+        if dk.hasPathTo(dijks, dst):
+            path = dk.pathTo(dijks,dst)
+        else:
+            path = 'No hay camino'
+    else:
+        path = 'No existen los vértices'
+
+    return path
     # ejecutar Dijkstra desde source
     # obtener el camino hasta dst
     # retornar el camino
-    return None
+    
+   # return None
     
 # Funciones de comparacion
 
