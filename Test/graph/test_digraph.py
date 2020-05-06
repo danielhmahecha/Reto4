@@ -5,6 +5,7 @@ from DataStructures import listiterator as it
 from ADT import graph as g
 from ADT import queue as q
 from ADT import list as lt
+import dijkstra
 
 
 class DigraphTest (unittest.TestCase):

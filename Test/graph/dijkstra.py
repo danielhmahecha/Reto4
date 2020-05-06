@@ -31,6 +31,13 @@ def newDijkstra(graph, s):
         v = minpq.delMin(pq)
         if not g.containsVertex(graph,v):
             raise Exception("Vertex ["+v+"] is not in the graph")
+        elif g.containsVertex(graph, v):
+            adj = g.adjacents(graph,v)
+            adj_it = it.newIterator(adj)
+            while it.hasNext(adj_it):
+                w = it.next(adj_it)
+                edge = g.getEdge(graph, v, w)
+                relax(search, edge)
         # obtener los enlaces adjacentes de v
         # Iterar sobre la lista de enlaces
         # Relajar (relax) cada enlace
