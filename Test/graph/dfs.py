@@ -17,7 +17,7 @@ def newDFS(graph, source):
     """
     prime = nextPrime (g.numVertex(graph) * 2)
     search={'graph':graph, 's':source, 'visitedMap':None}   
-    search['visitedMap'] = map.newMap(capacity=prime, maptype='PROBING', comparefunction=graph['comparefunction'])
+    search['visitedMap'] = map.newMap(numelements=prime, maptype='PROBING', comparefunction=graph['comparefunction'])
     map.put(search['visitedMap'],source, {'marked':True,'edgeTo':None})
     dfs(search, source)
     return search
@@ -101,7 +101,7 @@ def comparenames (searchname, element):
 
 
 if __name__ ==  "__main__" :
-    graph = g.newGraph(7,comparenames)
+    graph = g.newGraph(7,comparenames,True)
 
     g.insertVertex (graph, 'Bogota')
     g.insertVertex (graph, 'Yopal')
@@ -128,8 +128,7 @@ if __name__ ==  "__main__" :
     g.addEdge (graph, 'Cucuta','Bucaramanga', 1 )
 
     search = newDFS(graph,'Bogota')
-
-
+    
     print ('A Cali', hasPathTo(search, 'Cali'))
     print ('A Cucuta', hasPathTo(search,'Cucuta'))
     pathManizales= pathTo(search,'Manizales')
