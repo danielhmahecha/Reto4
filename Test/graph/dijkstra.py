@@ -165,6 +165,7 @@ if __name__ ==  "__main__" :
 
     print("Caso de dos ciudades sin escala \n")
     t = camino_menos_pesado(graph,'Bogota','Medellin')
+
     resultado(t)
     print("--------------------------------------------------------------------------------------------------------")
     print("Caso de la misma ciudad \n")
@@ -173,5 +174,6 @@ if __name__ ==  "__main__" :
     print("--------------------------------------------------------------------------------------------------------")
     print("Caso de dos ciudades con escala \n")
     t = camino_menos_pesado(graph,'Cali','Manizales')
+    
     resultado(t)
 

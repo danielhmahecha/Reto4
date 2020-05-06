@@ -190,6 +190,40 @@ class DigraphTest (unittest.TestCase):
         lst = g.adjacents (graph, 'Manizales')
         self.assertEqual (lt.size(lst), 0)
 
+    def test_dijkstra(self):
+        graph = g.newGraph(7, self.comparenames, directed=True)
+
+        g.insertVertex (graph, 'Bogota')
+        g.insertVertex (graph, 'Yopal')
+        g.insertVertex (graph, 'Cali')
+        g.insertVertex (graph, 'Medellin')
+        g.insertVertex (graph, 'Pasto')
+        g.insertVertex (graph, 'Barranquilla')
+        g.insertVertex (graph, 'Manizales')
+
+        g.addEdge (graph, 'Bogota', 'Yopal',4)
+        g.addEdge (graph, 'Bogota', 'Medellin',6)
+        g.addEdge (graph, 'Bogota', 'Pasto',10)
+        g.addEdge (graph, 'Bogota', 'Cali',8)
+        g.addEdge (graph, 'Cali', 'Bogota',7)
+        g.addEdge (graph, 'Yopal', 'Medellin',9)
+        g.addEdge (graph, 'Medellin', 'Pasto',5)
+        g.addEdge (graph, 'Pasto', 'Bogota',10)
+        g.addEdge (graph, 'Cali', 'Pasto',3)
+        g.addEdge (graph, 'Cali', 'Barranquilla',10)
+        g.addEdge (graph, 'Barranquilla','Manizales',9)
+        g.addEdge (graph, 'Pasto','Manizales',6)
+
+        search1 = dijkstra.newDijkstra(graph,'Bogota')
+        has1=dijkstra.hasPathTo(search1,'Manizales')
+        self.assertEqual(has1,True)
+        path1=dijkstra.pathTo(search1,'Manizales') 
+        self.assertEqual(lt.size(path1), 2)
+
+        search2=dijkstra.newDijkstra(graph,'Manizales')
+        has2=dijkstra.hasPathTo(search2,'Yopal')
+        self.assertEqual(has2,False)
+
 
 if __name__ == "__main__":
     unittest.main()
