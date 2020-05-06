@@ -113,3 +113,65 @@ def nextPrime(N):
             found = True
     return prime 
 
+def camino_menos_pesado (graph,source,dst):
+    if g.containsVertex(graph, source) and g.containsVertex(graph, dst):
+        dijks = newDijkstra(graph,source)
+        if hasPathTo(dijks, dst):
+            path = pathTo(dijks,dst)
+        else:
+            path = 'No hay camino'
+    else:
+        path = 'No existen los vértices'
+
+    return path
+def resultado(pila):
+    if pila == 'No hay camino' or pila == 'No existen los vértices':
+                print (pila)
+    else:
+        print("El camino de menor costo entre los vertices es:")
+        totalDist = 0
+        while not stk.isEmpty (pila): 
+            step = stk.pop(pila)
+            totalDist += step['weight']
+            print (step['vertexA'] + "-->" + step['vertexB'] + " costo: " + str(step['weight']))
+        print ("Total: " + str (totalDist))
+
+
+if __name__ ==  "__main__" :
+    graph = g.newGraph(7,comparenames)
+
+    g.insertVertex (graph, 'Bogota')
+    g.insertVertex (graph, 'Yopal')
+    g.insertVertex (graph, 'Cali')
+    g.insertVertex (graph, 'Medellin')
+    g.insertVertex (graph, 'Pasto')
+    g.insertVertex (graph, 'Barranquilla')
+    g.insertVertex (graph, 'Manizales')
+    g.insertVertex (graph, 'Cucuta')
+    g.insertVertex (graph, 'Bucaramanga')
+
+    g.addEdge (graph, 'Bogota', 'Yopal', 1.0 )
+    g.addEdge (graph, 'Bogota', 'Medellin', 1.0 )
+    g.addEdge (graph, 'Bogota', 'Pasto', 1.0 )
+    g.addEdge (graph, 'Bogota', 'Cali', 1.0 )
+    g.addEdge (graph, 'Yopal', 'Medellin', 1.0 )
+    g.addEdge (graph, 'Medellin', 'Pasto', 1.0 )
+    g.addEdge (graph, 'Cali', 'Pasto', 11.0 )
+    g.addEdge (graph, 'Cali', 'Barranquilla', 1.0 )
+    g.addEdge (graph, 'Barranquilla','Manizales', 1.0 )
+    g.addEdge (graph, 'Pasto','Manizales', 14.0 )
+    g.addEdge (graph, 'Cucuta','Bucaramanga', 1.0 )
+    g.addEdge (graph, 'Bucaramanga','Cucuta', 1.0 )
+
+    print("Caso de dos ciudades sin escala \n")
+    t = camino_menos_pesado(graph,'Bogota','Medellin')
+    resultado(t)
+    print("--------------------------------------------------------------------------------------------------------")
+    print("Caso de la misma ciudad \n")
+    t = camino_menos_pesado(graph,'Bucaramanga','Bucaramanga')
+    resultado(t)
+    print("--------------------------------------------------------------------------------------------------------")
+    print("Caso de dos ciudades con escala \n")
+    t = camino_menos_pesado(graph,'Cali','Manizales')
+    resultado(t)
+
