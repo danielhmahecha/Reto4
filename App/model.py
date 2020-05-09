@@ -44,7 +44,7 @@ def newCatalog():
     rgraph = g.newGraph(111353,compareByKey)
     catalog = {'reviewGraph':rgraph}    
     return catalog
-
+    
 
 def addReviewNode (catalog, row):
     """
