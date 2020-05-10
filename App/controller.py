@@ -64,7 +64,7 @@ def load_non_directed (catalog):
             model.addReviewNode_non_directed (catalog, row)
             model.addReviewEdge_non_directed (catalog, row)
     t1_stop = process_time() #tiempo final
-    print("Tiempo de ejecución carga de grafo de vuelos:",t1_stop-t1_start," segundos")   
+    print("Tiempo de ejecución carga de grafo no dirigido de vuelos:",t1_stop-t1_start," segundos")   
 def load_directed (catalog):
     """
     Carga las bibliotecas del archivo.
@@ -81,7 +81,7 @@ def load_directed (catalog):
             model.addReviewNode_directed (catalog, row)
             model.addReviewEdge_directed (catalog, row)
     t1_stop = process_time() #tiempo final
-    print("Tiempo de ejecución carga de grafo de vuelos:",t1_stop-t1_start," segundos") 
+    print("Tiempo de ejecución carga de grafo dirigido de vuelos:",t1_stop-t1_start," segundos") 
 
 
 
@@ -105,17 +105,16 @@ def loadData (catalog):
 
 
 def countNodesEdges_non_directed(catalog):
-    t1_start = process_time() #tiempo inicial
+    
     nodes, edges = model.countNodesEdges_non_directed(catalog)
-    t1_stop = process_time() #tiempo final
-    print("Tiempo de ejecución de conteo de componentes conectados:",t1_stop-t1_start," segundos")
+   
+    
     return nodes, edges
 
 def countNodesEdges_directed(catalog):
-    t1_start = process_time() #tiempo inicial
+    
     nodes, edges = model.countNodesEdges_directed(catalog)
-    t1_stop = process_time() #tiempo final
-    print("Tiempo de ejecución de conteo de componentes conectados:",t1_stop-t1_start," segundos")
+    
     return nodes, edges
 
 def getPath(catalog, vertices, strct):

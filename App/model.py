@@ -44,7 +44,7 @@ def newCatalog():
     Inicializa el catálogo y retorna el catalogo inicializado.
     """
     rgraph = g.newGraph(111353,compareByKey)
-    tgraph = g.newGraph(111353,compareByKey)
+    tgraph = g.newGraph(111353,compareByKey,True)
     catalog = {'non_directed_Graph':rgraph, 'directed_Graph':tgraph}    
     return catalog
     
@@ -95,8 +95,8 @@ def countNodesEdges_directed (catalog):
     """
     Retorna la cantidad de nodos y enlaces del grafo de bibliotecas
     """
-    nodes = g.numVertex(catalog['non_directed_Graph'])
-    edges = g.numEdges(catalog['non_directed_Graph'])
+    nodes = g.numVertex(catalog['directed_Graph'])
+    edges = g.numEdges(catalog['directed_Graph'])
 
     return nodes,edges
 
