@@ -48,7 +48,7 @@ def printList (lst):
 
 # Funciones para la carga de datos 
 
-def loadLibraries (catalog):
+def load_non_directed (catalog):
     """
     Carga las bibliotecas del archivo.
     Por cada para de bibliotecas, se almacena la distancia en kilometros entre ellas.
@@ -61,10 +61,27 @@ def loadLibraries (catalog):
         spamreader = csv.DictReader(csvfile, dialect=dialect)
         for row in spamreader:
             #print(row)
-            model.addReviewNode (catalog, row)
-            model.addReviewEdge (catalog, row)
+            model.addReviewNode_non_directed (catalog, row)
+            model.addReviewEdge_non_directed (catalog, row)
     t1_stop = process_time() #tiempo final
     print("Tiempo de ejecución carga de grafo de vuelos:",t1_stop-t1_start," segundos")   
+def load_directed (catalog):
+    """
+    Carga las bibliotecas del archivo.
+    Por cada para de bibliotecas, se almacena la distancia en kilometros entre ellas.
+    """
+    t1_start = process_time() #tiempo inicial
+    libsFile = cf.data_dir + 'flights_edges_directed.csv'
+    dialect = csv.excel()
+    dialect.delimiter=';'
+    with open(libsFile, encoding="utf-8-sig") as csvfile:
+        spamreader = csv.DictReader(csvfile, dialect=dialect)
+        for row in spamreader:
+            #print(row)
+            model.addReviewNode_directed (catalog, row)
+            model.addReviewEdge_directed (catalog, row)
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución carga de grafo de vuelos:",t1_stop-t1_start," segundos") 
 
 
 
@@ -81,18 +98,34 @@ def loadData (catalog):
     """
     Carga los datos de los archivos en la estructura de datos
     """
-    loadLibraries(catalog)    
+    load_non_directed(catalog)    
+    load_directed(catalog)
 
 # Funciones llamadas desde la vista y enviadas al modelo
 
 
-def countNodesEdges(catalog):
+def countNodesEdges_non_directed(catalog):
     t1_start = process_time() #tiempo inicial
-    nodes, edges = model.countNodesEdges(catalog)
+    nodes, edges = model.countNodesEdges_non_directed(catalog)
     t1_stop = process_time() #tiempo final
     print("Tiempo de ejecución de conteo de componentes conectados:",t1_stop-t1_start," segundos")
     return nodes, edges
 
+def countNodesEdges_directed(catalog):
+    t1_start = process_time() #tiempo inicial
+    nodes, edges = model.countNodesEdges_directed(catalog)
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución de conteo de componentes conectados:",t1_stop-t1_start," segundos")
+    return nodes, edges
+
+def getPath(catalog, vertices, strct):
+    t1_start = process_time() #tiempo inicial
+    source=vertices.split(" ")[0]
+    dst=vertices.split(" ")[1]
+    path = model.getPath(catalog, source, dst,strct)
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución de ",strct," ",t1_stop-t1_start," segundos")
+    return path
 
 def getShortestPath(catalog, vertices):
     t1_start = process_time() #tiempo inicial

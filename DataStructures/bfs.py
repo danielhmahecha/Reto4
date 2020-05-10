@@ -7,38 +7,40 @@ from ADT import map as map
 from DataStructures import edge as e
 from ADT import stack as stk
 from ADT import list as lt
+#from Test.graph import bfs2 as bfs
 
 
 
-
-def newDFS(graph, source):
+def newBFS(graph, source):
     """
-    Crea una busqueda DFS para un grafo y un vertice origen
+    Crea una busqueda BFS para un grafo y un vertice origen
     """
     prime = nextPrime (g.numVertex(graph) * 2)
-    search={'graph':graph, 's':source, 'visitedMap':None}   
+    search={'graph':graph, 's':source, 'visitedMap':None}
     search['visitedMap'] = map.newMap(capacity=prime, maptype='PROBING', comparefunction=graph['comparefunction'])
     map.put(search['visitedMap'],source, {'marked':True,'edgeTo':None})
-    dfs(search, source)
+    bfs(search, source)
     return search
 
-def dfs (search, v):
-    adjs = g.adjacents(search['graph'],v)
-    adjs_iter = it.newIterator (adjs)
-    while (it.hasNext(adjs_iter)):
-        w = it.next (adjs_iter)
-        visited_w = map.get(search['visitedMap'], w)
-        if visited_w == None:
-            map.put(search['visitedMap'], w, {'marked':True, 'edgeTo':v})
-            dfs(search, w)
-
+def bfs (search, source):
+    queue = q.newQueue()
+    q.enqueue(queue, source)
+    while not (q.isEmpty(queue)):
+        v = q.dequeue (queue)
+        adj_v=g.adjacents(search['graph'],v)
+        adj_it = it.newIterator(adj_v)
+        while it.hasNext(adj_it):
+            w = it.next(adj_it)
+            visited_w = map.get(search['visitedMap'], w)
+            if visited_w == None:
+                map.put(search['visitedMap'],w,{'marked':True,'edgeTo':v})
+                q.enqueue(queue,w)
 
 def hasPathTo(search, v):
     element = map.get(search['visitedMap'],v)
     if element and element['value']['marked']==True:
         return True
     return False
-
 
 
 def pathTo(search, v):
@@ -51,6 +53,8 @@ def pathTo(search, v):
     stk.push(path,search['s'])
     return path
 
+def comparenames (searchname, element):
+    return (searchname == element['key'])
 
 
 # Function to return the smallest  
@@ -72,6 +76,7 @@ def isPrime(n):
       
     for i in range(5,int(math.sqrt(n) + 1), 6):  
         if(n % i == 0 or n % (i + 2) == 0): 
+            
             return False
       
     return True
@@ -94,42 +99,3 @@ def nextPrime(N):
             found = True
   
     return prime 
-
-
-def comparenames (searchname, element):
-    return (searchname == element['key'])
-
-
-if __name__ ==  "__main__" :
-    graph = g.newGraph(7,comparenames,False)
-
-    g.insertVertex (graph, 'Bogota')
-    g.insertVertex (graph, 'Yopal')
-    g.insertVertex (graph, 'Cali')
-    g.insertVertex (graph, 'Medellin')
-    g.insertVertex (graph, 'Pasto')
-    g.insertVertex (graph, 'Barranquilla')
-    g.insertVertex (graph, 'Manizales')
-    
-    g.insertVertex (graph, 'Cucuta')
-    g.insertVertex (graph, 'Bucaramanga')
-
-
-    g.addEdge (graph, 'Bogota', 'Yopal', 1 )
-    g.addEdge (graph, 'Bogota', 'Medellin', 1 )
-    g.addEdge (graph, 'Bogota', 'Pasto', 1 )
-    g.addEdge (graph, 'Bogota', 'Cali', 1 )
-    g.addEdge (graph, 'Yopal', 'Medellin', 1 )
-    g.addEdge (graph, 'Medellin', 'Pasto', 1 )
-    g.addEdge (graph, 'Cali', 'Pasto', 1 )
-    g.addEdge (graph, 'Cali', 'Barranquilla', 1 )
-    g.addEdge (graph, 'Barranquilla','Manizales', 1 )
-    g.addEdge (graph, 'Pasto','Manizales', 1 )
-    g.addEdge (graph, 'Cucuta','Bucaramanga', 1 )
-
-    search = newDFS(graph,'Bogota')
-    
-    print ('A Cali', hasPathTo(search, 'Cali'))
-    print ('A Cucuta', hasPathTo(search,'Cucuta'))
-    pathManizales= pathTo(search,'Manizales')
-    print('DSF::roadToManizales',pathManizales)

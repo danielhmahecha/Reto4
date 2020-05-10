@@ -7,33 +7,55 @@ from ADT import map as map
 from DataStructures import edge as e
 from ADT import stack as stk
 from ADT import list as lt
+#from Test.graph import bfs2 as bfs
 
+
+
+
+def newBFS(graph, source):
+    """
+    Crea una busqueda BFS para un grafo y un vertice origen
+    """
+    prime = nextPrime (g.numVertex(graph) * 2)
+    search={'graph':graph, 's':source, 'visitedMap':None}
+    search['visitedMap'] = map.newMap(capacity=prime, maptype='PROBING', comparefunction=graph['comparefunction'])
+    map.put(search['visitedMap'],source, {'marked':True,'edgeTo':None})
+    bfs(search, source)
+    return search
 
 def bfs (search, source):
     queue = q.newQueue()
     q.enqueue(queue, source)
     while not (q.isEmpty(queue)):
         v = q.dequeue (queue)
-        visited_v = map.get(search['visitedMap'], v)['value']
-        # Loop v's adjacent vertices with w
-        # If w has not visited 
-        # Visit w 
-        # Enqueue w
+        adj_v=g.adjacents(search['graph'],v)
+        adj_it = it.newIterator(adj_v)
+        while it.hasNext(adj_it):
+            w = it.next(adj_it)
+            visited_w = map.get(search['visitedMap'], w)
+            if visited_w == None:
+                map.put(search['visitedMap'],w,{'marked':True,'edgeTo':v})
+                q.enqueue(queue,w)
 
 def hasPathTo(search, v):
-    # Has v been visited?
+    element = map.get(search['visitedMap'],v)
+    if element and element['value']['marked']==True:
+        return True
     return False
-
 
 
 def pathTo(search, v):
     if hasPathTo(search, v)==False:
         return None
     path= stk.newStack()
-    # Loop through previous vertices (edgeTo) until source vertex:
-    # Add each previous vertex to the path
-    # At the end of the loop, add the source vertex to the path
+    while v != search['s']:
+        stk.push(path,v)
+        v = map.get(search['visitedMap'],v)['value']['edgeTo']
+    stk.push(path,search['s'])
     return path
+
+def comparenames (searchname, element):
+    return (searchname == element['key'])
 
 
 
@@ -79,6 +101,39 @@ def nextPrime(N):
   
     return prime 
 
+if __name__ ==  "__main__" :
+    graph = g.newGraph(7,comparenames,False)
 
-def comparenames (searchname, element):
-    return (searchname == element['key'])
+    g.insertVertex (graph, 'Bogota')
+    g.insertVertex (graph, 'Yopal')
+    g.insertVertex (graph, 'Cali')
+    g.insertVertex (graph, 'Medellin')
+    g.insertVertex (graph, 'Pasto')
+    g.insertVertex (graph, 'Barranquilla')
+    g.insertVertex (graph, 'Manizales')
+    
+    g.insertVertex (graph, 'Cucuta')
+    g.insertVertex (graph, 'Bucaramanga')
+
+
+    g.addEdge (graph, 'Bogota', 'Yopal', 1 )
+    g.addEdge (graph, 'Bogota', 'Medellin', 1 )
+    g.addEdge (graph, 'Bogota', 'Pasto', 1 )
+    g.addEdge (graph, 'Bogota', 'Cali', 1 )
+    g.addEdge (graph, 'Yopal', 'Medellin', 1 )
+    g.addEdge (graph, 'Medellin', 'Pasto', 1 )
+    g.addEdge (graph, 'Cali', 'Pasto', 1 )
+    g.addEdge (graph, 'Cali', 'Barranquilla', 1 )
+    g.addEdge (graph, 'Barranquilla','Manizales', 1 )
+    g.addEdge (graph, 'Pasto','Manizales', 1 )
+    g.addEdge (graph, 'Cucuta','Bucaramanga', 1 )
+
+    search = newBFS(graph,'Bogota')
+
+
+    print ('A Cali', hasPathTo(search, 'Cali'))
+    print ('A Cucuta', hasPathTo(search,'Cucuta'))
+    pathManizales= pathTo(search,'Manizales')
+    print('BSF::roadToManizales',pathManizales)
+    number=stk.size(pathManizales)
+    print(number)

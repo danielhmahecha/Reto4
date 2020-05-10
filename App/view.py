@@ -43,7 +43,10 @@ def printMenu():
     print("Bienvenido al Laboratorio 9")
     print("1- Cargar información")
     print("2- Contar nodos y enlances cargados ")
-    print("3- Obtener el camino de menor costo entre dos vértices usando Dijkstra (origen destino)")
+    print("3- Cantidad de componentes conectados (req 1)")
+    print("4- Ruta entre dos aereopuertos (req 2)")
+    print("5- Ruta mas corta entre dos aereopuertos (req 3)")
+    print("6- Ruta de menor tiempo de vuelo entre dos aereopuertos (req 4)")
     print("0- Salir")
 
 
@@ -73,9 +76,46 @@ def main():
             catalog = initCatalog ()
             loadData (catalog)
         elif int(inputs[0])==2:
-            verticesNum, edgesNum = controller.countNodesEdges(catalog) 
-            print("El grafo tiene: ", verticesNum," nodos y", edgesNum," enlaces")
-        elif int(inputs[0])==3:
+            verticesNum, edgesNum = controller.countNodesEdges_non_directed(catalog) 
+            print("El grafo no dirigido tiene: ", verticesNum," nodos y", edgesNum," enlaces")
+            verticesNum, edgesNum = controller.countNodesEdges_directed(catalog) 
+            print("El grafo no dirigido tiene: ", verticesNum," nodos y", edgesNum," enlaces")
+
+
+
+
+
+
+
+
+        elif int(inputs[0])==4:
+            vertices =input("Ingrese el vertice origen y destino (EJEMPLO: HNL-1-25 ICT-1-25 ) \n")
+            lst = controller.getPath(catalog,vertices,'dfs')
+            print("El camino entre los vertices es:")
+            if lst is not None:
+                lst_it = it.newIterator(lst)
+                route=''
+                while it.hasNext(lst_it):
+                    city = it.next(lst_it)
+                    route += city + " "
+                print (route)
+            else:
+                print('\nNo hay camino para los vértices ingresados\n')
+            
+        elif int(inputs[0])==5:
+            vertices =input("Ingrese el vertice origen y destino (EJEMPLO: HNL-1-25 ICT-1-25 ) \n")
+            lst = controller.getPath(catalog,vertices,'bfs')
+            print("El camino entre los vertices es:")
+            if lst is not None:
+                lst_it = it.newIterator(lst)
+                route=''
+                while it.hasNext(lst_it):
+                    city = it.next(lst_it)
+                    route += city + " "
+                print (route)
+            else:
+                print('\nNo hay camino para los vértices ingresados\n')
+        elif int(inputs[0])==6:
             vertices =input("Ingrese el vertice origen y destino. (Ejemplo: 'ALB-5-12 LAX-5-12')\n")
             path = controller.getShortestPath(catalog,vertices)
             if path == 'No hay camino' or path == 'No existen los vértices':

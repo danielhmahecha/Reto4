@@ -23,7 +23,7 @@ def newDFS(graph, source):
     return search
 
 def dfs (search, v):
-    adjs = g.adjacents(search['graph'],v)
+    adjs = g.adjacents(search['graph'], v)
     adjs_iter = it.newIterator (adjs)
     while (it.hasNext(adjs_iter)):
         w = it.next (adjs_iter)
@@ -33,6 +33,13 @@ def dfs (search, v):
             dfs(search, w)
 
 
+def newDFS_2(grafo, source,revisados):
+    """
+    Crea una busqueda DFS para un grafo y un vertice origen
+    """
+    map.put(revisados,source,{'marked':True , 'edgeTo' : None})
+    dfs_2(grafo, source,revisados)
+    
 def hasPathTo(search, v):
     element = map.get(search['visitedMap'],v)
     if element and element['value']['marked']==True:
@@ -51,7 +58,21 @@ def pathTo(search, v):
     stk.push(path,search['s'])
     return path
 
+def dfs_2 (grafo, v, revisados) :
+    adjs = g.adjacents(grafo,v)
+    adjs_iter = it.newIterator (adjs)
+    while (it.hasNext(adjs_iter)):
+        w = it.next (adjs_iter)
+        visited_w = map.contains(revisados, w)
+        if visited_w == False :
+            map.put(revisados, w, {'marked':True, 'edgeTo': v })
+            dfs_2(grafo, w,revisados)
 
+def hasPathTo_2(graph, v):
+    element = map.get(graph,v)
+    if element and element['value']['marked']==True:
+        return True
+    return False           
 
 # Function to return the smallest  
 # prime number greater than N 
@@ -85,6 +106,7 @@ def nextPrime(N):
     prime = N 
     found = False
   
+
     # Loop continuously until isPrime returns  
     # True for a number greater than n  
     while(not found): 
@@ -98,38 +120,3 @@ def nextPrime(N):
 
 def comparenames (searchname, element):
     return (searchname == element['key'])
-
-
-if __name__ ==  "__main__" :
-    graph = g.newGraph(7,comparenames,False)
-
-    g.insertVertex (graph, 'Bogota')
-    g.insertVertex (graph, 'Yopal')
-    g.insertVertex (graph, 'Cali')
-    g.insertVertex (graph, 'Medellin')
-    g.insertVertex (graph, 'Pasto')
-    g.insertVertex (graph, 'Barranquilla')
-    g.insertVertex (graph, 'Manizales')
-    
-    g.insertVertex (graph, 'Cucuta')
-    g.insertVertex (graph, 'Bucaramanga')
-
-
-    g.addEdge (graph, 'Bogota', 'Yopal', 1 )
-    g.addEdge (graph, 'Bogota', 'Medellin', 1 )
-    g.addEdge (graph, 'Bogota', 'Pasto', 1 )
-    g.addEdge (graph, 'Bogota', 'Cali', 1 )
-    g.addEdge (graph, 'Yopal', 'Medellin', 1 )
-    g.addEdge (graph, 'Medellin', 'Pasto', 1 )
-    g.addEdge (graph, 'Cali', 'Pasto', 1 )
-    g.addEdge (graph, 'Cali', 'Barranquilla', 1 )
-    g.addEdge (graph, 'Barranquilla','Manizales', 1 )
-    g.addEdge (graph, 'Pasto','Manizales', 1 )
-    g.addEdge (graph, 'Cucuta','Bucaramanga', 1 )
-
-    search = newDFS(graph,'Bogota')
-    
-    print ('A Cali', hasPathTo(search, 'Cali'))
-    print ('A Cucuta', hasPathTo(search,'Cucuta'))
-    pathManizales= pathTo(search,'Manizales')
-    print('DSF::roadToManizales',pathManizales)

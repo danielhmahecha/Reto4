@@ -39,10 +39,10 @@ def newGraph( size, cmpfunction, directed ):
                 'directed':directed,
                 'indegree':None}
 
-        graph ['vertices'] = map.newMap(numelements=prime, maptype='PROBING',comparefunction=cmpfunction)
+        graph ['vertices'] = map.newMap(capacity=prime, maptype='PROBING',comparefunction=cmpfunction)
 
         if (directed):
-            graph ['indegree'] = map.newMap(numelements=prime, maptype='PROBING',comparefunction=cmpfunction)
+            graph ['indegree'] = map.newMap(capacity=prime, maptype='PROBING',comparefunction=cmpfunction)
         return graph
 
     except Exception as e:

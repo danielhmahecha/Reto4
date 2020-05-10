@@ -17,7 +17,7 @@ def newDijkstra(graph, s):
     """
     prime = nextPrime (g.numVertex(graph) * 2)
     search = {'graph':graph, 's':s, 'visitedMap':None, 'minpq':None}
-    search['visitedMap'] = map.newMap(numelements=prime, maptype='PROBING', comparefunction=graph['comparefunction'])
+    search['visitedMap'] = map.newMap(capacity=prime, maptype='PROBING', comparefunction=graph['comparefunction'])
     vertices = g.vertices (graph)
     itvertices = it.newIterator (vertices)
     while (it.hasNext (itvertices)):
@@ -138,7 +138,7 @@ def resultado(pila):
 
 
 if __name__ ==  "__main__" :
-    graph = g.newGraph(7,comparenames)
+    graph = g.newGraph(7,comparenames,True)
 
     g.insertVertex (graph, 'Bogota')
     g.insertVertex (graph, 'Yopal')

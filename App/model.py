@@ -28,6 +28,8 @@ from ADT import list as lt
 from DataStructures import listiterator as it
 from datetime import datetime
 from DataStructures import dijkstra as dk
+from DataStructures import dfs as dfs 
+from DataStructures import bfs as bfs 
 
 """
 Se define la estructura de un catálogo de libros.
@@ -42,57 +44,89 @@ def newCatalog():
     Inicializa el catálogo y retorna el catalogo inicializado.
     """
     rgraph = g.newGraph(111353,compareByKey)
-    catalog = {'reviewGraph':rgraph}    
+    tgraph = g.newGraph(111353,compareByKey)
+    catalog = {'non_directed_Graph':rgraph, 'directed_Graph':tgraph}    
     return catalog
     
 
-def addReviewNode (catalog, row):
+def addReviewNode_non_directed (catalog, row):
     """
     Adiciona un nodo para almacenar un libro o usuario 
     """
-    if not g.containsVertex(catalog['reviewGraph'], row['SOURCE']):
-        g.insertVertex (catalog['reviewGraph'], row['SOURCE'])
-    if not g.containsVertex(catalog['reviewGraph'], row['DEST']):
-        g.insertVertex (catalog['reviewGraph'], row['DEST'])
+    if not g.containsVertex(catalog['non_directed_Graph'], row['SOURCE']):
+        g.insertVertex (catalog['non_directed_Graph'], row['SOURCE'])
+    if not g.containsVertex(catalog['non_directed_Graph'], row['DEST']):
+        g.insertVertex (catalog['non_directed_Graph'], row['DEST'])
 
-def addReviewEdge (catalog, row):
+def addReviewEdge_non_directed (catalog, row):
     """
     Adiciona un enlace para almacenar una revisión
     """
     if row['AIR_TIME'] != "":
-        g.addEdge (catalog['reviewGraph'], row['SOURCE'], row['DEST'], float(row['AIR_TIME']))
+        g.addEdge (catalog['non_directed_Graph'], row['SOURCE'], row['DEST'], float(row['AIR_TIME']))
 
 
-def addLibraryNode (catalog, row):
+def addReviewNode_directed (catalog, row):
     """
-    Adiciona un nodo para almacenar una biblioteca
+    Adiciona un nodo para almacenar un libro o usuario 
     """
-    if not g.containsVertex(catalog['librariesGraph'], row['ID_src']):
-        g.insertVertex (catalog['librariesGraph'], row['ID_src'])
-    if not g.containsVertex(catalog['librariesGraph'], row['ID_dst']):
-        g.insertVertex (catalog['librariesGraph'], row['ID_dst'])
+    if not g.containsVertex(catalog['directed_Graph'], row['SOURCE']):
+        g.insertVertex (catalog['directed_Graph'], row['SOURCE'])
+    if not g.containsVertex(catalog['directed_Graph'], row['DEST']):
+        g.insertVertex (catalog['directed_Graph'], row['DEST'])
 
-def addLibraryEdge  (catalog, row):
+def addReviewEdge_directed (catalog, row):
     """
-    Adiciona un enlace entre bibliotecas
+    Adiciona un enlace para almacenar una revisión
     """
-    g.addEdge (catalog['librariesGraph'], row['ID_src'], row['ID_dst'], float(row['dist']))
+    if row['AIR_TIME'] != "":
+        g.addEdge (catalog['directed_Graph'], row['SOURCE'], row['DEST'], float(row['AIR_TIME']))
 
 
-def countNodesEdges (catalog):
+def countNodesEdges_non_directed (catalog):
     """
     Retorna la cantidad de nodos y enlaces del grafo de bibliotecas
     """
-    nodes = g.numVertex(catalog['reviewGraph'])
-    edges = g.numEdges(catalog['reviewGraph'])
+    nodes = g.numVertex(catalog['non_directed_Graph'])
+    edges = g.numEdges(catalog['non_directed_Graph'])
 
     return nodes,edges
+def countNodesEdges_directed (catalog):
+    """
+    Retorna la cantidad de nodos y enlaces del grafo de bibliotecas
+    """
+    nodes = g.numVertex(catalog['non_directed_Graph'])
+    edges = g.numEdges(catalog['non_directed_Graph'])
+
+    return nodes,edges
+
+
+def getPath (catalog, source, dest, strct):
+    """
+    Retorna el camino, si existe, entre vertice origen y destino
+    """
+    path = None
+    if g.containsVertex(catalog['non_directed_Graph'],source) and g.containsVertex(catalog['non_directed_Graph'],dest):
+        #print("vertices: ",source,", ", dest)
+        if strct == 'dfs':
+            search = dfs.newDFS(catalog['non_directed_Graph'],source)
+            path = dfs.pathTo(search,dest)
+        if strct == 'bfs':
+            search = bfs.newBFS(catalog['non_directed_Graph'],source)
+            path = bfs.pathTo(search, dest)
+    # ejecutar dfs desde source
+    # obtener el camino hasta dst
+    # retornar el camino
+
+    return path
+
+
 
 def getShortestPath (catalog, source, dst):
     """
     Retorna el camino de menor costo entre vertice origen y destino, si existe 
     """
-    graph = catalog['reviewGraph']
+    graph = catalog['directed_Graph']
     print("vertices: ",source,", ",dst)
     if g.containsVertex(graph, source) and g.containsVertex(graph, dst):
         dijks = dk.newDijkstra(graph,source)
