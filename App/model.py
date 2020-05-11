@@ -100,6 +100,19 @@ def countNodesEdges_directed (catalog):
 
     return nodes,edges
 
+def componentes_conectados(catalog):
+    counter = 0
+    grafo = catalog['non_directed_Graph']
+    vertices = g.vertices(grafo)
+    graph_iter = it.newIterator (vertices)
+    m = map.newMap(capacity= 55681,maptype='CHAINING',comparefunction=grafo['comparefunction']) 
+    while (it.hasNext (graph_iter)):
+        n = it.next (graph_iter)
+        visited_w = map.get(m, n)
+        if visited_w == None :
+            dfs.newDFS_2(grafo,n,m)
+            counter += 1
+    return counter
 
 def getPath (catalog, source, dest, strct):
     """

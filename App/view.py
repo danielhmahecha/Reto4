@@ -80,14 +80,9 @@ def main():
             print("El grafo no dirigido tiene: ", verticesNum," nodos y", edgesNum," enlaces")
             verticesNum, edgesNum = controller.countNodesEdges_directed(catalog) 
             print("El grafo no dirigido tiene: ", verticesNum," nodos y", edgesNum," enlaces")
-
-
-
-
-
-
-
-
+        elif int(inputs[0])==3:
+            com_con=controller.countConnectedComponents(catalog)
+            print('El grafo tiene: ',com_con,"componentes conectados")
         elif int(inputs[0])==4:
             vertices =input("Ingrese el vertice origen y destino (EJEMPLO: HNL-1-25 ICT-1-25 ) \n")
             lst = controller.getPath(catalog,vertices,'dfs')
